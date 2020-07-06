@@ -1,5 +1,7 @@
 # Library
 import sys
+sys.path.insert(0, "/home/fuu/sdb/fac-via-ppg/src")
+
 import os
 import wave
 import librosa
@@ -12,7 +14,7 @@ import ppg
 import pickle
 
 from common.hparams_628 import create_hparams_stage
-from script.train_ppg2mel_new import load_model
+from script.train_ppg2mel_628 import load_model
 from ppg import DependenciesPPG
 import seaborn as sns
 from scipy.io import wavfile
@@ -20,6 +22,9 @@ from common import feat
 from common.layers import TacotronSTFT
 from waveglow.denoiser import Denoiser
 
+from kaldi.matrix.sparse import SparseMatrix
+from kaldi.matrix import Matrix, Vector
+from kaldi.matrix.common import MatrixTransposeType
 
 """
 生成音频文件列表txt的相关函数
@@ -109,12 +114,6 @@ class Audio:
         plt.xlabel("time (s)")
         plt.show()
 
-    def plot_ppg(self):
-        """画出PPGs"""
-        # deps = ppg.DependenciesPPG()
-        # ppg = du.get_ppg(self.path, deps)
-        pass
-
     def return_audio_data(self):
         try:
             return self.au, self.sr
@@ -150,6 +149,9 @@ class Audio:
 
 # ------------ PPGs ----------------- #
 # ----------------------------------- #
+PHONEMES = ["aa", "ae", "ah", "ao", "aw", "ay", "b", "ch", "d", "dh", "eh", "er", "ey", "f", "g", "hh", "ih", 
+            "iy", "jh", "k", "l", "m", "n", "ng", "ow", "oy", "p", "r", 
+            "s", "sh", "t", "th", "uh", "uw", "v", "w", "y", "z", "zh", "sil"]
 # Get PPGs
 def get_ppg(wav_path, deps):
     """
@@ -165,6 +167,34 @@ def get_ppg(wav_path, deps):
     seq = ppg.compute_full_ppg_wrapper(wave_data, deps.nnet, deps.lda, 10)
     return seq
 
+# Plot 39dim PPGs
+def image_ppg(ppg_np):
+    """
+    Input: 
+        ppg: numpy array
+    Return:
+        ax: 画布信息
+        im：图像信息
+    """
+    ppg_deps = ppg.DependenciesPPG()
+    ppg_M = Matrix(ppg_np)
+    monophone_ppgs = ppg.reduce_ppg_dim(ppg_M, ppg_deps.monophone_trans)
+    monophone_ppgs = monophone_ppgs.numpy().T
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    im = ax.imshow(monophone_ppgs, aspect="auto", origin="lower",
+                   interpolation='none')
+    return ax, im
+
+def plot_ppg(ax, im):
+    ax.set_yticks(list(range(0, 40)))
+    ax.set_yticklabels(PHONEMES)
+    plt.colorbar(im, ax=ax)
+    plt.ylabel("Phonemes")
+    plt.xlabel("Time")
+    # fig.suptitle('matplotlib.axes.Axes.set_yticklabels() function Example\n\n', fontweight ="bold")
+    plt.tight_layout()
+    plt.show()  
 
 # ------------ P2M ------------------ #
 # ----------------------------------- #
@@ -280,25 +310,16 @@ def main_for_p2m(checkpoint_path, path):
     # plot mel pair
     draw_mel_pair(mel_list, path)
 
-class MelSpectrogrom:
-    """
-    载入音频或者mel数据
-    处理相关数据
-    画mel图
-    """
-    pass
-
 
 # ------------ M2W ------------------ #
 # ----------------------------------- #
 # STFT
 
-
 MAX_WAV_VALUE = 32768.0
 waveglow_sigma = 0.6
 denoiser_strength = 0.005
 
-# ------------ Data ----------------- #
+# ------------ Data for M2W ----------------- #
 # Loads wavdata into torch array
 def load_wav_to_torch(full_path):
     """

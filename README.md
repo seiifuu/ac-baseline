@@ -1,4 +1,5 @@
-# Foreign Accent Conversion by Synthesizing Speech from Phonetic Posteriorgrams
+# AC Baseline
+> Modify from Foreign Accent Conversion by Synthesizing Speech from Phonetic Posteriorgrams
 
 This repository hosts the code we used to
 prepare our interspeech'19 paper titled "[Foreign Accent Conversion by Synthesizing Speech from Phonetic Posteriorgrams](https://www.isca-speech.org/archive/Interspeech_2019/pdfs/1778.pdf)"

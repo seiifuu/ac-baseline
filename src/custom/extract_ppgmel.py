@@ -249,6 +249,7 @@ class PPGMelLoader_x(torch.utils.data.Dataset):
 
 if __name__ == '__main__':
 
+    training_files_path = "/home/fuu/sdb/fac-via-ppg/data/filelists/cmu/bdl_train_list.txt"
     training_files_path = "/home/fuu/sdb/fac-via-ppg/data/filelists/cmu/bdl_val_list.txt"
     txtname = sys.argv[2]
 

@@ -57,7 +57,7 @@ def create_hparams(**kwargs):
         "output_directory": '/home/fuu/sdb/model/fac_base_cmu/p2m_bdl',  # Directory to save checkpoints.
         # Directory to save tensorboard logs. Just keep it like this.
         "log_directory": 'log',
-        "checkpoint_path": '/home/fuu/sdb/fac-via-ppg/output/6_28/bdl_p2m/checkpoint_74800',  # Path to a checkpoint file.
+        "checkpoint_path": '/home/fuu/sdb/model/fac_base_cmu/p2m_bdl/checkpoint_76200',  # Path to a checkpoint file.
         "warm_start": False,  # Load the model only (warm start)
         "n_gpus": 1,  # Number of GPUs
         "rank": 0,  # Rank of current gpu
