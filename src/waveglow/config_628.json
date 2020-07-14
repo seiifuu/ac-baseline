@@ -7,7 +7,7 @@
         "iters_per_checkpoint": 2500,
         "batch_size": 6,
         "seed": 16807,
-        "checkpoint_path": "/home/fuu/sdb/model/fac_base_cmu/m2w_bdl/waveglow_212500"
+        "checkpoint_path": "/home/fuu/sdb/model/fac_base_cmu/m2w_bdl/waveglow_625000"
     },
     "data_config": {
         "training_files":"/home/fuu/sdb/fac-via-ppg/data/filelists/cmu/bdl_train_list.txt",

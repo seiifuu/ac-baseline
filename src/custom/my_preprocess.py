@@ -12,6 +12,7 @@ import IPython.display as ipd
 import common.data_utils as du
 import ppg
 import pickle
+import torch
 
 from common.hparams_628 import create_hparams_stage
 from script.train_ppg2mel_628 import load_model
@@ -328,7 +329,7 @@ def load_wav_to_torch(full_path):
     sampling_rate, data = wavfile.read(full_path)
     return torch.from_numpy(data).float(), sampling_rate
 
-# Get Mel from path for m2w
+# Get Mel from path
 def get_mel_for_test(file_path):
     """
     Library:
@@ -346,7 +347,7 @@ def get_mel_for_test(file_path):
     melspec = stft.mel_spectrogram(audio_norm)
     return melspec
 
-# Load mel from model for m2w
+# Load mel from model
 def preprocess_model_mel_for_m2w(path, tacotron_model):
     '''mel from model'''
     deps = DependenciesPPG()
